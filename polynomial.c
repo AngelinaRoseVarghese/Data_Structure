@@ -4,6 +4,7 @@ struct polynomial
     int coeff;
     int expo;
 }polynomial1[10],polynomial2[10],result[20];
+
 int main()
 {
     int i=0,j=0,k=0,count1,count2;
@@ -19,34 +20,37 @@ int main()
     printf("No. of terms you wish to enter in second polynomial: ");
     scanf("%d",&count2);
     printf("Enter the details of the second polynomial\n");
-    for(i=0;i<count2;i++)
+    for(j=0;j<count2;j++)
     {
         printf("Enter the coefficient and exponent: ");
-        scanf("%d%d",&polynomial2[i].coeff,&polynomial2[i].expo);
+        scanf("%d%d",&polynomial2[j].coeff,&polynomial2[j].expo);
     }
-    
+    i = 0;
+    j = 0;
+
    
     while(i<count1 && j<count2)
     {
-        if(polynomial1[i].expo==polynomial2[i].expo)
+        if(polynomial1[i].expo==polynomial2[j].expo)
         {
-            result[k].coeff=polynomial2[i].coeff+polynomial2[j].coeff;
+            result[k].coeff=polynomial1[i].coeff+polynomial2[j].coeff;
             result[k].expo=polynomial1[i].expo;
-            
+            i++,j++;
         }
         else if(polynomial1[i].expo<polynomial2[j].expo)
         {
             result[k].coeff=polynomial2[j].coeff;
             result[k].expo=polynomial2[j].expo;
-            
+            j++;
         }
         else
         {
             result[k].coeff=polynomial1[i].coeff;
             result[k].expo=polynomial1[i].expo;
-            
+            i++;
         }
-        i++,k++,j++;
+        k++;
+        
     }
     
     while(i<count1)
@@ -61,23 +65,19 @@ int main()
         result[k].expo=polynomial2[j].expo;
         j++,k++;
     }
-    if (count1>count2)
-      k=count1;
-    else
-      k=count2;
-    
-        
-    for(i=0;i<k;i++)
+    for(int i=0;i<k;i++)
     {
         if(result[i].expo!=0)
         {
-            printf("%dx^%d+",result[i].coeff,result[i].expo);
+            printf("%dx^%d",result[i].coeff,result[i].expo);
         }
         else
         {
             printf("%d\n",result[i].coeff);
         }
+        if(i!=k-1)
+            printf("+");
         
-    }   
+    } 
     return 0;
 }
