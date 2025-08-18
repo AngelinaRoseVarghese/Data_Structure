@@ -8,6 +8,7 @@ int main()
     int num1[row1][column1];
     int result[100][3];
     int transpose[100][3];
+    printf("Enter the elements of first matrix: ");
     for(i=0;i<row1;i++)
     {
         for(j=0;j<column1;j++)
@@ -70,4 +71,5 @@ int main()
         printf("\n");
     }
     return 0;
+
 }
