@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 int main() 
 {
     int element, front = -1, rear = -1, count, option;
@@ -14,24 +13,27 @@ int main()
     {
         if(option == 1)
         {
-            printf("Enter the element to be added: ");
-            scanf("%d", &element);
-
             if((rear+1) % count == front)
             {
                 printf("Queue is full\n");
             }
             else if(front == -1)
             {
+            	
+		printf("Enter the element to be added: ");
+		scanf("%d", &element);
                 front = rear = 0;
                 num[rear] = element;
             }
             else
             {
                 rear = (rear+1) % count;
+                printf("Enter the element to be added: ");
+		scanf("%d", &element);
                 num[rear] = element;
             }
 
+//Printing the circular queue
             if(front != -1)
             {
                 printf("Current queue: ");
@@ -46,6 +48,7 @@ int main()
             }
         }
 
+//------------------------------------
         else if(option == 2)
         {
             if(front == -1 && rear == -1)
@@ -62,6 +65,11 @@ int main()
             {
                 printf("Deleted item is %d\n", num[front]);
                 front = (front+1) % count;
+            }
+            
+//Printing the circular queue
+            if(front != -1)
+            {
                 printf("Current queue: ");
                 int i = front;
                 while(1)
@@ -72,9 +80,21 @@ int main()
                 }
                 printf("\n");
             }
-        }
-
-        printf("What do you want to do: \n 1.Insert an element\n 2.Delete an element\n 3.Exit\n");
+         }
+        
+//------------------------------------
+	else if (option == 3)
+	{
+		break;
+	}
+//------------------------------------
+	else
+	{
+		printf("Invaild\n");
+	}	
+	
+	
+        printf("\n\nWhat do you want to do: \n 1.Insert an element\n 2.Delete an element\n 3.Exit\n");
         scanf("%d", &option);
     }
 
