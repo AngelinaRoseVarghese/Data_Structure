@@ -29,19 +29,6 @@ int main()
 				scanf("%d", &element);
                 num[rear] = element;
             }
-//Printing the circular queue
-            if(front != -1)
-            {
-                printf("Current queue: ");
-                int i = front;
-                while(1)
-                {
-                    printf("%d ", num[i]);
-                    if(i == rear) break;
-                    i = (i+1) % count;
-                }
-                printf("\n");
-            }
         }
 //------------------------------------
         else if(option == 2)
@@ -61,32 +48,33 @@ int main()
                 printf("Deleted item is %d\n", num[front]);
                 front = (front+1) % count;
             }
+        }
+//------------------------------------
+        else if (option == 3)
+    	{
+    		break;
+    	}
+//------------------------------------
+    	else
+    	{
+    		printf("Invaild\n");
+    	}
+	
 //Printing the circular queue
-            if(front != -1)
+        if(front != -1)
+        {
+            printf("Current queue: ");
+            int i = front;
+            while(1)
             {
-                printf("Current queue: ");
-                int i = front;
-                while(1)
-                {
-                    printf("%d ", num[i]);
-                    if(i == rear) break;
-                    i = (i+1) % count;
-                }
-                printf("\n");
+                printf("%d ", num[i]);
+                if(i == rear) break;
+                i = (i+1) % count;
             }
-         }
-//------------------------------------
-	else if (option == 3)
-	{
-		break;
-	}
-//------------------------------------
-	else
-	{
-		printf("Invaild\n");
-	}
-        printf("\n\nWhat do you want to do: \n 1.Insert an element\n 2.Delete an element\n 3.Exit\n");
-        scanf("%d", &option);
+            printf("\n");
+        }
+    printf("\n\nWhat do you want to do: \n 1.Insert an element\n 2.Delete an element\n 3.Exit\n");
+    scanf("%d", &option);
     }
     return 0;
 }
