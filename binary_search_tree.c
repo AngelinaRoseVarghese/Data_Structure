@@ -3,114 +3,95 @@
 
 struct node {
     int data;
-    struct node *left;
-    struct node *right;
+    struct node *left, *right;
 };
 
-int main() {
-    struct node *root = NULL, *current, *parent, *newNode, *successor, *successorParent;
-    int choice, value;
+struct node* create(int value) {
+    struct node* n = (struct node*)malloc(sizeof(struct node));
+    n->data = value;
+    n->left = n->right = NULL;
+    return n;
+}
 
-    while (1) {
-        printf("\nChoose action: 1.Insert 2.Delete 3.Search 4.Exit: ");
-        scanf("%d", &choice);
+struct node* insert(struct node* root, int value) {
+    if (root == NULL) return create(value);
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else
+        root->right = insert(root->right, value);
+    return root;
+}
 
-        if (choice == 4) {
-            printf("Exiting program.\n");
-            break;
+struct node* findMin(struct node* root) {
+    while (root->left) root = root->left;
+    return root;
+}
+
+struct node* delete(struct node* root, int value) {
+    if (root == NULL) return root;
+
+    if (value < root->data)
+        root->left = delete(root->left, value);
+    else if (value > root->data)
+        root->right = delete(root->right, value);
+    else {
+        if (root->left == NULL) {
+            struct node* temp = root->right;
+            free(root);
+            return temp;
         }
-
-        if (choice == 1) {
-            printf("Enter value to insert: ");
-            scanf("%d", &value);
-
-            newNode = (struct node*)malloc(sizeof(struct node));
-            newNode->data = value;
-            newNode->left = newNode->right = NULL;
-
-            if (root == NULL) {
-                root = newNode;
-            } else {
-                current = root; parent = NULL;
-                while (current != NULL) {
-                    parent = current;
-                    if (value < current->data) current = current->left;
-                    else current = current->right;
-                }
-                if (value < parent->data) parent->left = newNode;
-                else parent->right = newNode;
-            }
-            printf("Node %d inserted.\n", value);
+        if (root->right == NULL) {
+            struct node* temp = root->left;
+            free(root);
+            return temp;
         }
-
-        else if (choice == 2) {
-            printf("Enter value to delete: ");
-            scanf("%d", &value);
-
-            current = root; parent = NULL;
-            while (current != NULL && current->data != value) {
-                parent = current;
-                if (value < current->data) current = current->left;
-                else current = current->right;
-            }
-
-            if (current == NULL) {
-                printf("Value %d not found.\n", value);
-            } 
-            else if (current->left == NULL && current->right == NULL) {
-                if (parent == NULL) root = NULL;
-                else if (parent->left == current) parent->left = NULL;
-                else parent->right = NULL;
-                free(current);
-                printf("Node %d deleted.\n", value);
-            } 
-            else if (current->left == NULL || current->right == NULL) {
-                struct node *child = (current->left != NULL) ? current->left : current->right;
-                if (parent == NULL) root = child;
-                else if (parent->left == current) parent->left = child;
-                else parent->right = child;
-                free(current);
-                printf("Node %d deleted.\n", value);
-            } 
-            else {
-                successorParent = current; successor = current->right;
-                while (successor->left != NULL) { successorParent = successor; successor = successor->left; }
-                current->data = successor->data;
-                if (successorParent->left == successor) successorParent->left = successor->right;
-                else successorParent->right = successor->right;
-                free(successor);
-                printf("Node %d deleted.\n", value);
-            }
-        }
-
-        else if (choice == 3) {
-            printf("Enter value to search: ");
-            scanf("%d", &value);
-
-            current = root;
-            while (current != NULL && current->data != value) {
-                if (value < current->data) current = current->left;
-                else current = current->right;
-            }
-
-            if (current != NULL) printf("Value %d found in the tree.\n", value);
-            else printf("Value %d not found in the tree.\n", value);
-        }
-
-        else {
-            printf("Invalid choice! Please try again.\n");
-            continue;
-        }
-
-        // Print tree inorder
-        struct node *stack[50]; int top = -1; current = root;
-        printf("Current Tree (Inorder): ");
-        while (current != NULL || top != -1) {
-            while (current != NULL) { stack[++top] = current; current = current->left; }
-            current = stack[top--]; printf("%d ", current->data); current = current->right;
-        }
-        printf("\n");
+        struct node* temp = findMin(root->right);
+        root->data = temp->data;
+        root->right = delete(root->right, temp->data);
     }
 
+    return root;
+}
+
+int search(struct node* root, int value) {
+    if (root == NULL) return 0;
+    if (root->data == value) return 1;
+    if (value < root->data) return search(root->left, value);
+    return search(root->right, value);
+}
+
+void inorder(struct node* root) {
+    if (root) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+int main() {
+    struct node *root = NULL;
+    int ch, value;
+
+    while (1) {
+        printf("\n1.Insert 2.Delete 3.Search 4.Exit\nEnter choice: ");
+        scanf("%d", &ch);
+
+        if (ch == 4) break;
+
+        printf("Enter value: ");
+        scanf("%d", &value);
+
+        if (ch == 1) root = insert(root, value);
+        else if (ch == 2) root = delete(root, value);
+        else if (ch == 3) {
+            if (search(root, value)) printf("Found\n");
+            else printf("Not Found\n");
+        }
+        else printf("Invalid choice");
+
+        printf("Inorder: ");
+        inorder(root);
+        printf("\n");
+    }
     return 0;
 }
